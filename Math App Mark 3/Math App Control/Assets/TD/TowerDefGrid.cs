@@ -23,9 +23,16 @@ public class TowerDefGrid : MonoBehaviour
 	public GameObject enemy9;
 	public GameObject enemy10;
 
-	//A*
 
-	public GameObject aGrid;
+	// Towers
+
+	public Sprite GrassTile;
+	public Sprite GrassTileGrid;
+	public Sprite TowerTile;
+	public Sprite TowerTileGrid;
+	public Sprite RoadTile;
+
+
 
 
     // Grid
@@ -117,8 +124,11 @@ public class TowerDefGrid : MonoBehaviour
 		gridTileEnd.layer = 9;
         grid[14, 11] = gridTileEnd;
 
-        grid[1, 4].GetComponent<SpriteRenderer>().color = Color.red;
-        grid[14, 11].GetComponent<SpriteRenderer>().color = Color.red;
+        grid[1, 4].GetComponent<SpriteRenderer>().sprite = RoadTile;
+        grid[14, 11].GetComponent<SpriteRenderer>().sprite = RoadTile;
+
+		grid[14, 11].GetComponent<GridTile>().road = true;
+
 
         Build();
     }
@@ -237,9 +247,10 @@ public class TowerDefGrid : MonoBehaviour
             {
 
 
-                if (grid[x + 1, y].GetComponent<SpriteRenderer>().color != Color.red && grid[x + 1, y].GetComponent<SpriteRenderer>().color != Color.green)
+				if (grid[x + 1, y].GetComponent<GridTile>().road == false && grid[x + 1, y].GetComponent<GridTile>().tower == false)
                 {
-                    grid[x + 1, y].GetComponent<SpriteRenderer>().color = Color.blue;
+                    grid[x + 1, y].GetComponent<SpriteRenderer>().sprite = RoadTile;
+					grid[x + 1, y].GetComponent<GridTile>().canBuild = true;
                     grid[x + 1, y].GetComponent<GridTile>().setup = true;
                     towerPointXOne = x + 1;
                     towerPointYOne = y;
@@ -263,9 +274,10 @@ public class TowerDefGrid : MonoBehaviour
             if (grid[x - 1, y].tag != "End")
             {
 
-                if (grid[x - 1, y].GetComponent<SpriteRenderer>().color != Color.red && grid[x - 1, y].GetComponent<SpriteRenderer>().color != Color.green)
+				if (grid[x - 1, y].GetComponent<GridTile>().road == false && grid[x - 1, y].GetComponent<GridTile>().tower == false)
                 {
-                    grid[x - 1, y].GetComponent<SpriteRenderer>().color = Color.blue;
+					grid[x - 1, y].GetComponent<SpriteRenderer>().sprite = RoadTile;
+					grid[x - 1, y].GetComponent<GridTile>().canBuild = true;
                     grid[x - 1, y].GetComponent<GridTile>().setup = true;
                     towerPointXTwo = x - 1;
                     towerPointYTwo = y;
@@ -295,9 +307,10 @@ public class TowerDefGrid : MonoBehaviour
             {
 
 
-                if (grid[x, y + 1].GetComponent<SpriteRenderer>().color != Color.red && grid[x, y + 1].GetComponent<SpriteRenderer>().color != Color.green)
+				if (grid[x, y + 1].GetComponent<GridTile>().road == false && grid[x, y + 1].GetComponent<GridTile>().tower == false)
                 {
-                    grid[x, y + 1].GetComponent<SpriteRenderer>().color = Color.blue;
+					grid[x, y + 1].GetComponent<SpriteRenderer>().sprite = RoadTile;
+					grid[x, y + 1].GetComponent<GridTile>().canBuild = true;
                     grid[x, y + 1].GetComponent<GridTile>().setup = true;
                     towerPointXThree = x;
                     towerPointYThree = y + 1;
@@ -322,9 +335,10 @@ public class TowerDefGrid : MonoBehaviour
             {
 
 
-                if (grid[x, y - 1].GetComponent<SpriteRenderer>().color != Color.red && grid[x, y - 1].GetComponent<SpriteRenderer>().color != Color.green)
+				if (grid[x, y - 1].GetComponent<GridTile>().road == false && grid[x, y - 1].GetComponent<GridTile>().tower == false)
                 {
-                    grid[x, y - 1].GetComponent<SpriteRenderer>().color = Color.blue;
+					grid[x, y - 1].GetComponent<SpriteRenderer>().sprite = RoadTile;
+					grid[x, y - 1].GetComponent<GridTile>().canBuild = true;
                     grid[x, y - 1].GetComponent<GridTile>().setup = true;
                     towerPointXFour = x;
                     towerPointYFour = y - 1;
@@ -346,125 +360,7 @@ public class TowerDefGrid : MonoBehaviour
 
 
 
-		// Test
 
-		/*
-
-
-		if (grid[x + 1, y - 1] != null)
-		{
-			
-			if (grid[x + 1, y - 1].tag != "End")
-			{
-				
-				
-				if (grid[x + 1, y].GetComponent<SpriteRenderer>().color != Color.red && grid[x + 1, y].GetComponent<SpriteRenderer>().color != Color.green)
-				{
-					grid[x + 1, y].GetComponent<SpriteRenderer>().color = Color.blue;
-					grid[x + 1, y].GetComponent<GridTile>().setup = true;
-					towerPointXOne = x + 1;
-					towerPointYOne = y;
-					towerPointOne = true;
-				}
-				else
-				{
-					towerPointOne = false;
-					wayRight = false;
-					Debug.Log("Right");
-				}
-			}
-			else
-			{
-				UI.GetComponent<UIControl>().EndMaze();
-			}
-		}
-		
-		if (grid[x - 1, y + 1] != null)
-		{
-			if (grid[x - 1, y + 1].tag != "End")
-			{
-				
-				if (grid[x - 1, y].GetComponent<SpriteRenderer>().color != Color.red && grid[x - 1, y].GetComponent<SpriteRenderer>().color != Color.green)
-				{
-					grid[x - 1, y].GetComponent<SpriteRenderer>().color = Color.blue;
-					grid[x - 1, y].GetComponent<GridTile>().setup = true;
-					towerPointXTwo = x - 1;
-					towerPointYTwo = y;
-					towerPointTwo = true;
-				}
-				else
-				{
-					towerPointTwo = false;
-					wayLeft = false;
-					Debug.Log("Left");
-				}
-			}
-			else
-			{
-				UI.GetComponent<UIControl>().EndMaze();
-			}
-			
-		}
-		
-		
-		
-		
-		
-		if (grid[x - 1, y + 1] != null)
-		{
-			if (grid[x - 1, y + 1].tag != "End")
-			{
-				
-				
-				if (grid[x, y + 1].GetComponent<SpriteRenderer>().color != Color.red && grid[x, y + 1].GetComponent<SpriteRenderer>().color != Color.green)
-				{
-					grid[x, y + 1].GetComponent<SpriteRenderer>().color = Color.blue;
-					grid[x, y + 1].GetComponent<GridTile>().setup = true;
-					towerPointXThree = x;
-					towerPointYThree = y + 1;
-					towerPointThree = true;
-				}
-				else
-				{
-					towerPointThree = false;
-					wayUp = false;
-					Debug.Log("Up");
-				}
-			}
-			else
-			{
-				UI.GetComponent<UIControl>().EndMaze();
-			}
-		}
-		
-		if (grid[x + 1, y - 1] != null)
-		{
-			if (grid[x + 1, y - 1].tag != "End")
-			{
-				
-				
-				if (grid[x, y - 1].GetComponent<SpriteRenderer>().color != Color.red && grid[x, y - 1].GetComponent<SpriteRenderer>().color != Color.green)
-				{
-					grid[x, y - 1].GetComponent<SpriteRenderer>().color = Color.blue;
-					grid[x, y - 1].GetComponent<GridTile>().setup = true;
-					towerPointXFour = x;
-					towerPointYFour = y - 1;
-					towerPointFour = true;
-				}
-				else
-				{
-					towerPointFour = false;
-					wayDown = false;
-					Debug.Log("Down");
-				}
-			}
-			else
-			{
-				UI.GetComponent<UIControl>().EndMaze();
-			}
-		}
-
-		*/
 
 
 
@@ -481,36 +377,36 @@ public class TowerDefGrid : MonoBehaviour
 
         if (towerPointOne)
         {
-            if (grid[towerPointXOne, towerPointYOne].GetComponent<SpriteRenderer>().color != Color.red)
+            if (grid[towerPointXOne, towerPointYOne].GetComponent<GridTile>().canBuild)
             {
-                grid[towerPointXOne, towerPointYOne].GetComponent<SpriteRenderer>().color = Color.green;
+                grid[towerPointXOne, towerPointYOne].GetComponent<SpriteRenderer>().sprite = TowerTileGrid;
                 grid[towerPointXOne, towerPointYOne].GetComponent<GridTile>().setup = false;
             }
         }
 
         if (towerPointTwo)
         {
-            if (grid[towerPointXTwo, towerPointYTwo].GetComponent<SpriteRenderer>().color != Color.red)
+			if (grid[towerPointXTwo, towerPointYTwo].GetComponent<GridTile>().canBuild)
             {
-                grid[towerPointXTwo, towerPointYTwo].GetComponent<SpriteRenderer>().color = Color.green;
+				grid[towerPointXTwo, towerPointYTwo].GetComponent<SpriteRenderer>().sprite = TowerTileGrid;
                 grid[towerPointXTwo, towerPointYTwo].GetComponent<GridTile>().setup = false;
             }
         }
 
         if (towerPointThree)
         {
-            if (grid[towerPointXThree, towerPointYThree].GetComponent<SpriteRenderer>().color != Color.red)
+			if (grid[towerPointXThree, towerPointYThree].GetComponent<GridTile>().canBuild)
             {
-                grid[towerPointXThree, towerPointYThree].GetComponent<SpriteRenderer>().color = Color.green;
+				grid[towerPointXThree, towerPointYThree].GetComponent<SpriteRenderer>().sprite = TowerTileGrid;
                 grid[towerPointXThree, towerPointYThree].GetComponent<GridTile>().setup = false;
             }
         }
 
         if (towerPointFour)
         {
-            if (grid[towerPointXFour, towerPointYFour].GetComponent<SpriteRenderer>().color != Color.red)
+			if (grid[towerPointXFour, towerPointYFour].GetComponent<GridTile>().canBuild)
             {
-                grid[towerPointXFour, towerPointYFour].GetComponent<SpriteRenderer>().color = Color.green;
+				grid[towerPointXFour, towerPointYFour].GetComponent<SpriteRenderer>().sprite = TowerTileGrid;
                 grid[towerPointXFour, towerPointYFour].GetComponent<GridTile>().setup = false;
             }
         }
@@ -533,27 +429,30 @@ public class TowerDefGrid : MonoBehaviour
         {
             for (int y = 2; y < gridWidth; y++)
             {
-                if (grid[x, y].GetComponent<SpriteRenderer>().color == Color.blue)
+                if (grid[x, y].GetComponent<SpriteRenderer>().sprite == GrassTileGrid)
                 {
-                    grid[x, y].GetComponent<SpriteRenderer>().color = Color.green;
+					grid[x, y].GetComponent<SpriteRenderer>().sprite = GrassTile;
                 }
 
-                if (grid[x, y].GetComponent<SpriteRenderer>().color == Color.white)
+				if (grid[x, y].GetComponent<SpriteRenderer>().sprite == TowerTileGrid)
                 {
-                    grid[x, y].GetComponent<SpriteRenderer>().color = Color.cyan;
+					grid[x, y].GetComponent<SpriteRenderer>().sprite = TowerTile;
                 }
 
-				if (grid[x, y].GetComponent<SpriteRenderer>().color == Color.green)
+				if (grid[x, y].GetComponent<GridTile>().canBuild)
 				{
-					grid[x, y].layer = 10;
+					grid[x, y].GetComponent<SpriteRenderer>().sprite = TowerTile;
+					grid[x, y].GetComponent<SpriteRenderer>().color = new Color(1f,1f,1f,1f);
 				}
+
+
 
 
             }
 
         }
 
-		//Instantiate(aGrid,aGrid.transform.position,aGrid.transform.rotation);
+
         NewRound();
 
     }
@@ -567,7 +466,7 @@ public class TowerDefGrid : MonoBehaviour
     void NewRound()
     {
         Debug.Log("New Round");
-        roundTime = 4;
+        roundTime = 20;
         roundBuild = true;
         towerRound = false;
         reduceTime = true;
@@ -577,8 +476,8 @@ public class TowerDefGrid : MonoBehaviour
 
 
 
-        gridWidth = 12;
-        gridHeight = 12;
+        gridWidth = 14;
+        gridHeight = 14;
 
         for (int x = 2; x < gridWidth; x++)
         {
@@ -607,7 +506,7 @@ public class TowerDefGrid : MonoBehaviour
     void TowerRound()
     {
         Debug.Log("Tower Round");
-        towerTime = 2;
+        towerTime = 1;
         towerRound = true;
         waitingRound = false;
         reduceTowerTime = true;

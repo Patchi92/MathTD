@@ -30,7 +30,7 @@ public class Menu : MonoBehaviour {
 
     public void Play ()
     {
-        Application.LoadLevel("MathProblem");
+        Application.LoadLevel("MathTowerDefTest");
     }
 
     public void HighScore ()

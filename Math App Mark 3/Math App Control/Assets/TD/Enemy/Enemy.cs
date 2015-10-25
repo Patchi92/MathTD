@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour {
 
 
 
-	float speed = 10;
+	float speed = 8;
 	
 	public Vector2[] path;
 
@@ -45,7 +45,6 @@ public class Enemy : MonoBehaviour {
 		transform.position = Vector2.MoveTowards(transform.position, pos, speed * Time.deltaTime);
 
 
-		Debug.Log("this pos: " + pos);
 
 
         if (transform.position == escape.transform.position)
