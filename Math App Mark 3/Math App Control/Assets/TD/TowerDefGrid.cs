@@ -7,6 +7,7 @@ public class TowerDefGrid : MonoBehaviour
     public GameObject UI;
 
     public GameObject timer;
+	public GameObject message;
 
     GameObject gridTileStart;
     GameObject gridTileEnd;
@@ -21,7 +22,6 @@ public class TowerDefGrid : MonoBehaviour
 	public GameObject enemy7;
 	public GameObject enemy8;
 	public GameObject enemy9;
-	public GameObject enemy10;
 
 
 	// Towers
@@ -127,6 +127,7 @@ public class TowerDefGrid : MonoBehaviour
         grid[1, 4].GetComponent<SpriteRenderer>().sprite = RoadTile;
         grid[14, 11].GetComponent<SpriteRenderer>().sprite = RoadTile;
 
+		grid[1, 4].GetComponent<GridTile>().road = true;
 		grid[14, 11].GetComponent<GridTile>().road = true;
 
 
@@ -140,6 +141,7 @@ public class TowerDefGrid : MonoBehaviour
 
         if (roundBuild)
         {
+			message.GetComponent<Text>().text = "Byg et tårn";
             timer.GetComponent<Text>().text = "Tid: " + roundTime;
 
             if (reduceTime)
@@ -160,7 +162,7 @@ public class TowerDefGrid : MonoBehaviour
 
         if (waitingRound)
         {
-            timer.GetComponent<Text>().text = "Venter på creeps";
+            message.GetComponent<Text>().text = "Venter på creeps";
 
             if (reduceWaitngTime)
             {
@@ -177,7 +179,7 @@ public class TowerDefGrid : MonoBehaviour
 
         if (towerRound)
         {
-            timer.GetComponent<Text>().text = "SKYD!";
+            message.GetComponent<Text>().text = "SKYD!";
 
             if (reduceTowerTime)
             {
@@ -210,6 +212,7 @@ public class TowerDefGrid : MonoBehaviour
     {
         gridWidth = 14;
         gridHeight = 14;
+
 
         for (int x = 2; x < gridWidth; x++)
         {
@@ -362,7 +365,7 @@ public class TowerDefGrid : MonoBehaviour
 
 
 
-
+		grid[1, 4].GetComponent<SpriteRenderer>().sprite = RoadTile;
 
         if (!wayDown && !wayUp && !wayLeft && !wayRight)
         {
@@ -373,7 +376,6 @@ public class TowerDefGrid : MonoBehaviour
 
     public void Towerblock()
     {
-
 
         if (towerPointOne)
         {
@@ -417,9 +419,8 @@ public class TowerDefGrid : MonoBehaviour
     public void Begin()
     {
         UI.GetComponent<UIControl>().EndMaze();
-        UI.GetComponent<UIControl>().EndTimer();
         UI.GetComponent<UIControl>().BeginGame();
-
+		
         gridTileEnd.GetComponent<GridTile>().tileNumber = tileNumber + 1;
 
 		gridWidth = 14;
@@ -466,7 +467,7 @@ public class TowerDefGrid : MonoBehaviour
     void NewRound()
     {
         Debug.Log("New Round");
-        roundTime = 20;
+        roundTime = 5;
         roundBuild = true;
         towerRound = false;
         reduceTime = true;
@@ -537,7 +538,7 @@ public class TowerDefGrid : MonoBehaviour
     void SpawnEnemy()
     {
         int random;
-        random = Random.Range(1, 10);
+        random = Random.Range(1, 9);
 
         if (random == 1)
         {
@@ -587,11 +588,7 @@ public class TowerDefGrid : MonoBehaviour
 			Enemy9.transform.position = startPos;
 		}
 
-		if (random == 9)
-		{
-			GameObject Enemy10 = (GameObject)Instantiate(enemy10);
-			Enemy10.transform.position = startPos;
-		}
+
 
       
     }
@@ -1120,95 +1117,7 @@ public class TowerDefGrid : MonoBehaviour
             }
 
 
-            if (Enemy.GetComponent<Enemy>().multi == 10)
-            {
-
-				gridWidth = 14;
-				gridHeight = 14;
-
-                for (int x = 2; x < gridWidth; x++)
-                {
-                    for (int y = 2; y < gridWidth; y++)
-                    {
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep - 1 && Enemy.GetComponent<Enemy>().firstRun == true)
-						{
-							Coord[0] = startPos;
-						}
-						
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep && Enemy.GetComponent<Enemy>().firstRun == false)
-						{
-							Coord[0] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-						}
-						
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 1)
-						{
-							Coord[1] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-						}
-						
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 2)
-						{
-							Coord[2] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-						}
-						
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 3)
-						{
-							Coord[3] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-						}
-						
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 4)
-						{
-							Coord[4] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-						}
-						
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 5)
-						{
-							Coord[5] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-						}
-						
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 6)
-						{
-							Coord[6] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-						}
-						
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 7)
-						{
-							Coord[7] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-						}
-						
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 8)
-						{
-							Coord[8] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-						}
-						
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 9)
-						{
-							Coord[9] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-						}
-
-						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 10)
-                        {
-							Coord[10] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
-                        }
-
-                    }
-
-                }
-                Enemy.GetComponent<Enemy>().currentStep = Enemy.GetComponent<Enemy>().currentStep + 10;
-				Enemy.GetComponent<Enemy>().firstRun = false;
-				
-				Enemy.GetComponent<Enemy>().path[0] = Coord[0];
-				Enemy.GetComponent<Enemy>().path[1] = Coord[1];
-				Enemy.GetComponent<Enemy>().path[2] = Coord[2];
-				Enemy.GetComponent<Enemy>().path[3] = Coord[3];
-				Enemy.GetComponent<Enemy>().path[4] = Coord[4];
-				Enemy.GetComponent<Enemy>().path[5] = Coord[5];
-				Enemy.GetComponent<Enemy>().path[6] = Coord[6];
-				Enemy.GetComponent<Enemy>().path[7] = Coord[7];
-				Enemy.GetComponent<Enemy>().path[8] = Coord[8];
-				Enemy.GetComponent<Enemy>().path[9] = Coord[9];
-				Enemy.GetComponent<Enemy>().path[10] = Coord[10];
-
-            }
+           
 
 
 
@@ -1242,7 +1151,10 @@ public class TowerDefGrid : MonoBehaviour
         {
             for (int y = 2; y < gridWidth; y++)
             {
-                if (grid[x, y].GetComponent<GridTile>().tower)
+
+				// H&V Tower
+
+                if (grid[x, y].GetComponent<GridTile>().towerVandH)
                 {
 
                     if (grid[x + 1, y] != null)
@@ -1307,6 +1219,146 @@ public class TowerDefGrid : MonoBehaviour
                     }
 
                 }
+
+				// D Tower
+
+				if (grid[x, y].GetComponent<GridTile>().towerD)
+				{
+					
+					if (grid[x - 1, y - 1] != null)
+					{
+						
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x - 1, y - 1].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Damage();
+								
+							}
+						}
+					}
+					
+					
+					if (grid[x - 1, y + 1] != null)
+					{
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x - 1, y + 1].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Damage();
+								
+							}
+						}
+						
+					}
+					
+					
+					if (grid[x + 1, y + 1] != null)
+					{
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x + 1, y + 1].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Damage();
+								
+							}
+						}
+					}
+					
+					
+					if (grid[x + 1, y - 1] != null)
+					{
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x + 1, y - 1].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Damage();
+								
+							}
+						}
+					}
+					
+				}
+
+
+				// Snipe Tower
+
+				if (grid[x, y].GetComponent<GridTile>().towerSnipe)
+				{
+					
+					if (grid[x + 1, y] != null)
+					{
+						
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x + 1, y].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Dead();
+								
+							}
+						}
+					}
+					
+					
+					if (grid[x - 1, y] != null)
+					{
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x - 1, y].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Dead();
+								
+							}
+						}
+						
+					}
+					
+					
+					if (grid[x, y + 1] != null)
+					{
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x, y + 1].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Dead();
+								
+							}
+						}
+					}
+					
+					
+					if (grid[x, y - 1] != null)
+					{
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x, y - 1].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Dead();
+								
+							}
+						}
+					}
+					
+				}
+
+
+
 
             }
 

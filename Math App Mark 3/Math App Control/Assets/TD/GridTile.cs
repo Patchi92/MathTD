@@ -12,7 +12,13 @@ public class GridTile : MonoBehaviour
     public int tileNumber;
   
 
-    public bool tower;
+	GameObject UI;
+    public bool towerVandH; //Tower Vercical and Horizontal
+	public bool towerD; //Tower Diagonal
+	public bool towerSnipe; //Tower Instant Removes a flower
+	bool towerBuild;
+
+	public bool tower;
 	public bool road;
 	public bool grass;
 	public bool canBuild;
@@ -36,13 +42,19 @@ public class GridTile : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		UI = GameObject.FindGameObjectWithTag("UI");
         Control = GameObject.FindGameObjectWithTag("Grid");
 		Render = gameObject.GetComponent<SpriteRenderer>();
 
 		grass = true;
 		canBuild = false;
-		tower = false;
 		road = false;
+		tower = false;
+		towerBuild = false;
+
+		towerD = false;
+		towerVandH = false;
+		towerSnipe = false;
 
 
 
@@ -53,6 +65,8 @@ public class GridTile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
         /*
 		if(canBuild)
 		{
@@ -110,10 +124,22 @@ public class GridTile : MonoBehaviour
         {
             if(gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile)
             {
-                gameObject.GetComponent<SpriteRenderer>().color = Color.grey;
-                tower = true;
-                Control.GetComponent<TowerDefGrid>().buildTower = false;
-                towerTurnLeft = 3;
+
+				if(UI.GetComponent<UIControl>().selectedTowerVandH)
+				{
+					BuildTowerVandH();
+				}
+
+				if(UI.GetComponent<UIControl>().selectedTowerD)
+				{
+					BuildTowerD();
+				}
+
+				if(UI.GetComponent<UIControl>().selectedTowerSnipe)
+				{
+					BuildTowerSnipe();
+				}
+
 
             }
 
@@ -137,16 +163,54 @@ public class GridTile : MonoBehaviour
 
     public void RoundOver()
     {
-        if (tower)
+        if (towerBuild)
         {
             --towerTurnLeft;
 
             if (towerTurnLeft == 0)
             {
-                tower = false;
-                gameObject.GetComponent<SpriteRenderer>().sprite = TowerTile;
+				towerD = false;
+				towerVandH = false;
+				towerSnipe = false;
+				gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 
             }
         }
     }
+
+
+	public void BuildTowerVandH() {
+
+		gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+		towerVandH = true;
+		Control.GetComponent<TowerDefGrid>().buildTower = false;
+		towerTurnLeft = 3;
+
+		towerBuild = true;
+
+	
+
+	}
+
+
+	public void BuildTowerD() {
+
+		gameObject.GetComponent<SpriteRenderer>().color = Color.grey;
+		towerD = true;
+		Control.GetComponent<TowerDefGrid>().buildTower = false;
+		towerTurnLeft = 3;
+
+		towerBuild = true;
+		
+	}
+
+	public void BuildTowerSnipe() {
+
+		gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+		towerSnipe = true;
+		Control.GetComponent<TowerDefGrid>().buildTower = false;
+		towerTurnLeft = 1;
+
+		towerBuild = true;
+	}
 }

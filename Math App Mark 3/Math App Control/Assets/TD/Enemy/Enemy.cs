@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour {
 
 
 
-	float speed = 8;
+	float speed = 5;
 	
 	public Vector2[] path;
 
@@ -405,7 +405,7 @@ public class Enemy : MonoBehaviour {
         --life;
     }
 
-    void Dead()
+    public void Dead()
     {
         Destroy(gameObject);
     }
