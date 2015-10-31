@@ -1,10 +1,18 @@
 fileFormatVersion: 2
 guid: 79ca9d336f1838c469cf5531992e2d5f
-timeCreated: 1444426138
+timeCreated: 1446036540
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - TowerOne: {instanceID: 0}
+  - TowerTwo: {instanceID: 0}
+  - TowerThree: {instanceID: 0}
+  - GrassTile: {instanceID: 0}
+  - GrassTileGrid: {instanceID: 0}
+  - TowerTile: {instanceID: 0}
+  - TowerTileGrid: {instanceID: 0}
+  - RoadTile: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

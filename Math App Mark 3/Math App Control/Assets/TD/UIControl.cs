@@ -35,7 +35,7 @@ public class UIControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        life.GetComponent<Text>().text = "Liv Tilbage: " + Grid.GetComponent<TowerDefGrid>().life.ToString();
+        //life.GetComponent<Text>().text = "Liv Tilbage: " + Grid.GetComponent<TowerDefGrid>().life.ToString();
 
 	}
 

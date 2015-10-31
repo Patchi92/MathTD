@@ -5,12 +5,14 @@ using System.Collections;
 public class TowerDefGrid : MonoBehaviour
 {
     public GameObject UI;
+	public string LevelToLoad;
 
     public GameObject timer;
 	public GameObject message;
 
     GameObject gridTileStart;
     GameObject gridTileEnd;
+	public GameObject[] Roads;
 
     public GameObject[] Enemies;
 
@@ -23,6 +25,15 @@ public class TowerDefGrid : MonoBehaviour
 	public GameObject enemy8;
 	public GameObject enemy9;
 
+	bool enemy2Allowed;
+	bool enemy3Allowed;
+	bool enemy4Allowed;
+	bool enemy5Allowed;
+	bool enemy6Allowed;
+	bool enemy7Allowed;
+	bool enemy8Allowed;
+	bool enemy9Allowed;
+
 
 	// Towers
 
@@ -31,7 +42,9 @@ public class TowerDefGrid : MonoBehaviour
 	public Sprite TowerTile;
 	public Sprite TowerTileGrid;
 	public Sprite RoadTile;
+	public Sprite RoadTileGrid;
 
+	public GameObject Splash;
 
 
 
@@ -61,16 +74,26 @@ public class TowerDefGrid : MonoBehaviour
     int towerPointYThree;
     int towerPointXFour;
     int towerPointYFour;
+	int towerPointXFive;
+	int towerPointYFive;
+	int towerPointXSix;
+	int towerPointYSix;
+	int towerPointXSeven;
+	int towerPointYSeven;
+	int towerPointXEight;
+	int towerPointYEight;
+
 
     bool towerPointOne = false;
     bool towerPointTwo = false;
     bool towerPointThree = false;
     bool towerPointFour = false;
 
-    bool wayUp;
-    bool wayDown;
-    bool wayLeft;
-    bool wayRight;
+	bool towerPointFive = false;
+	bool towerPointSix = false;
+	bool towerPointSeven = false;
+	bool towerPointEight = false;
+
 
     // Rounds
 
@@ -92,6 +115,21 @@ public class TowerDefGrid : MonoBehaviour
 
     // Life
     public int life;
+	public GameObject lifeOne;
+	public GameObject lifeTwo;
+	public GameObject lifeThree;
+
+
+	// Levels
+
+	public bool levelOne;
+	public bool levelTwo;
+	public bool levelThree;
+	public bool levelFour;
+	public bool levelFive;
+
+	public bool levelSandbox;
+
 
     // Use this for initialization
     void Start()
@@ -102,6 +140,81 @@ public class TowerDefGrid : MonoBehaviour
         waitingRound = false;
         buildTower = false;
         life = 3;
+
+
+		if(levelOne)
+		{
+			enemy2Allowed = true;
+			enemy3Allowed = false;
+			enemy4Allowed = true;
+			enemy5Allowed = false;
+			enemy6Allowed = true;
+			enemy7Allowed = false;
+			enemy8Allowed = false;
+			enemy9Allowed = false;
+		}
+
+		if(levelTwo)
+		{
+			enemy2Allowed = false;
+			enemy3Allowed = true;
+			enemy4Allowed = false;
+			enemy5Allowed = false;
+			enemy6Allowed = true;
+			enemy7Allowed = false;
+			enemy8Allowed = false;
+			enemy9Allowed = true;
+		}
+
+		if(levelThree)
+		{
+			enemy2Allowed = false;
+			enemy3Allowed = false;
+			enemy4Allowed = false;
+			enemy5Allowed = true;
+			enemy6Allowed = false;
+			enemy7Allowed = false;
+			enemy8Allowed = false;
+			enemy9Allowed = false;
+			
+		}
+
+		if(levelFour)
+		{
+			enemy2Allowed = false;
+			enemy3Allowed = false;
+			enemy4Allowed = true;
+			enemy5Allowed = false;
+			enemy6Allowed = false;
+			enemy7Allowed = false;
+			enemy8Allowed = true;
+			enemy9Allowed = false;
+		}
+
+		if(levelFive)
+		{
+			enemy2Allowed = false;
+			enemy3Allowed = false;
+			enemy4Allowed = false;
+			enemy5Allowed = true;
+			enemy6Allowed = false;
+			enemy7Allowed = true;
+			enemy8Allowed = false;
+			enemy9Allowed = false;
+		}
+
+		if(levelSandbox)
+		{
+			enemy2Allowed = true;
+			enemy3Allowed = true;
+			enemy4Allowed = true;
+			enemy5Allowed = true;
+			enemy6Allowed = true;
+			enemy7Allowed = true;
+			enemy8Allowed = true;
+			enemy9Allowed = true;
+		}
+
 
 
         gridTileStart = (GameObject)Instantiate(tile);
@@ -124,14 +237,14 @@ public class TowerDefGrid : MonoBehaviour
 		gridTileEnd.layer = 9;
         grid[14, 11] = gridTileEnd;
 
-        grid[1, 4].GetComponent<SpriteRenderer>().sprite = RoadTile;
-        grid[14, 11].GetComponent<SpriteRenderer>().sprite = RoadTile;
+        grid[1, 4].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
+        grid[14, 11].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
 
 		grid[1, 4].GetComponent<GridTile>().road = true;
 		grid[14, 11].GetComponent<GridTile>().road = true;
 
 
-        Build();
+		Invoke("Build", 0.01f);
     }
 
     // Update is called once per frame
@@ -141,8 +254,8 @@ public class TowerDefGrid : MonoBehaviour
 
         if (roundBuild)
         {
-			message.GetComponent<Text>().text = "Byg et tårn";
-            timer.GetComponent<Text>().text = "Tid: " + roundTime;
+			message.GetComponent<Text>().text = "D e t  e r  d i n  t u r !";
+            timer.GetComponent<Text>().text = "T i d :  " + roundTime;
 
             if (reduceTime)
             {
@@ -162,7 +275,7 @@ public class TowerDefGrid : MonoBehaviour
 
         if (waitingRound)
         {
-            message.GetComponent<Text>().text = "Venter på creeps";
+            message.GetComponent<Text>().text = "B l o m s t e r n e s  t u r !";
 
             if (reduceWaitngTime)
             {
@@ -179,7 +292,7 @@ public class TowerDefGrid : MonoBehaviour
 
         if (towerRound)
         {
-            message.GetComponent<Text>().text = "SKYD!";
+            message.GetComponent<Text>().text = "V a n d k a m p !";
 
             if (reduceTowerTime)
             {
@@ -194,9 +307,32 @@ public class TowerDefGrid : MonoBehaviour
         }
 
 
+		if(life == 3)
+		{
+			lifeOne.SetActive(true);
+			lifeTwo.SetActive(true);
+			lifeThree.SetActive(true);
+		}
+
+		if(life == 2)
+		{
+			lifeOne.SetActive(false);
+			lifeTwo.SetActive(true);
+			lifeThree.SetActive(true);
+		}
+
+		if(life == 1)
+		{
+			lifeOne.SetActive(false);
+			lifeTwo.SetActive(false);
+			lifeThree.SetActive(true);
+		}
+
+
+
         if(life == 0)
         {
-            Application.LoadLevel("MathTowerDefTest");
+            Application.LoadLevel(LevelToLoad);
         }
 
 
@@ -205,10 +341,76 @@ public class TowerDefGrid : MonoBehaviour
     void Build()
     {
 
-        Road(1, 4);
-    }
+		if(levelOne) 
+		{
+			grid[2, 4].GetComponent<GridTile>().LevelGen();
+			grid[3, 4].GetComponent<GridTile>().LevelGen();
+			grid[4, 5].GetComponent<GridTile>().LevelGen();
+			grid[3, 6].GetComponent<GridTile>().LevelGen();
+			grid[3, 7].GetComponent<GridTile>().LevelGen();
+			grid[3, 8].GetComponent<GridTile>().LevelGen();
+			grid[4, 9].GetComponent<GridTile>().LevelGen();
+			grid[5, 8].GetComponent<GridTile>().LevelGen();
+			grid[6, 8].GetComponent<GridTile>().LevelGen();
+			grid[7, 8].GetComponent<GridTile>().LevelGen();
+			grid[7, 9].GetComponent<GridTile>().LevelGen();
+			grid[7, 10].GetComponent<GridTile>().LevelGen();
+			grid[7, 11].GetComponent<GridTile>().LevelGen();
+			grid[8, 11].GetComponent<GridTile>().LevelGen();
+			grid[9, 11].GetComponent<GridTile>().LevelGen();
+			grid[9, 10].GetComponent<GridTile>().LevelGen();
+			grid[9, 9].GetComponent<GridTile>().LevelGen();
+			grid[9, 8].GetComponent<GridTile>().LevelGen();
+			grid[9, 7].GetComponent<GridTile>().LevelGen();
+			grid[10, 7].GetComponent<GridTile>().LevelGen();
+			grid[11, 7].GetComponent<GridTile>().LevelGen();
+			grid[12, 7].GetComponent<GridTile>().LevelGen();
+			grid[13, 7].GetComponent<GridTile>().LevelGen();
+			grid[13, 8].GetComponent<GridTile>().LevelGen();
+			grid[13, 9].GetComponent<GridTile>().LevelGen();
+			grid[12, 9].GetComponent<GridTile>().LevelGen();
+			grid[11, 9].GetComponent<GridTile>().LevelGen();
+			grid[11, 10].GetComponent<GridTile>().LevelGen();
+			grid[11, 11].GetComponent<GridTile>().LevelGen();
+			grid[12, 11].GetComponent<GridTile>().LevelGen();
+			grid[13, 11].GetComponent<GridTile>().LevelGen();
 
-    void CreateGrid()
+			Roads = GameObject.FindGameObjectsWithTag("Road");
+			
+			foreach (GameObject Road in Roads)
+			{
+				Road.GetComponent<GridTile>().ChangeToRoad();
+			}
+
+		}
+		
+		if(levelTwo) 
+		{
+			Road(1, 4);
+		}
+
+		if(levelThree) 
+		{
+			Road(1, 4);
+		}
+
+		if(levelFour) 
+		{
+			Road(1, 4);
+		}
+
+		if(levelFive) 
+		{
+			Road(1, 4);
+		}
+
+		if(levelSandbox) 
+		{
+			Road(1, 4);
+		}
+	}
+	
+	void CreateGrid()
     {
         gridWidth = 14;
         gridHeight = 14;
@@ -236,12 +438,9 @@ public class TowerDefGrid : MonoBehaviour
 
         Towerblock();
 
-        wayUp = true;
-        wayDown = true;
-        wayLeft = true;
-        wayRight = true;
 
 
+		// Horizontal and Vertical
 
         if (grid[x + 1, y] != null)
         {
@@ -252,7 +451,7 @@ public class TowerDefGrid : MonoBehaviour
 
 				if (grid[x + 1, y].GetComponent<GridTile>().road == false && grid[x + 1, y].GetComponent<GridTile>().tower == false)
                 {
-                    grid[x + 1, y].GetComponent<SpriteRenderer>().sprite = RoadTile;
+                    grid[x + 1, y].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
 					grid[x + 1, y].GetComponent<GridTile>().canBuild = true;
                     grid[x + 1, y].GetComponent<GridTile>().setup = true;
                     towerPointXOne = x + 1;
@@ -262,8 +461,6 @@ public class TowerDefGrid : MonoBehaviour
                 else
                 {
                     towerPointOne = false;
-                    wayRight = false;
-                    Debug.Log("Right");
                 }
             }
             else
@@ -279,7 +476,7 @@ public class TowerDefGrid : MonoBehaviour
 
 				if (grid[x - 1, y].GetComponent<GridTile>().road == false && grid[x - 1, y].GetComponent<GridTile>().tower == false)
                 {
-					grid[x - 1, y].GetComponent<SpriteRenderer>().sprite = RoadTile;
+					grid[x - 1, y].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
 					grid[x - 1, y].GetComponent<GridTile>().canBuild = true;
                     grid[x - 1, y].GetComponent<GridTile>().setup = true;
                     towerPointXTwo = x - 1;
@@ -289,8 +486,6 @@ public class TowerDefGrid : MonoBehaviour
                 else
                 {
                     towerPointTwo = false;
-                    wayLeft = false;
-                    Debug.Log("Left");
                 }
             }
             else
@@ -312,7 +507,7 @@ public class TowerDefGrid : MonoBehaviour
 
 				if (grid[x, y + 1].GetComponent<GridTile>().road == false && grid[x, y + 1].GetComponent<GridTile>().tower == false)
                 {
-					grid[x, y + 1].GetComponent<SpriteRenderer>().sprite = RoadTile;
+					grid[x, y + 1].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
 					grid[x, y + 1].GetComponent<GridTile>().canBuild = true;
                     grid[x, y + 1].GetComponent<GridTile>().setup = true;
                     towerPointXThree = x;
@@ -322,8 +517,6 @@ public class TowerDefGrid : MonoBehaviour
                 else
                 {
                     towerPointThree = false;
-                    wayUp = false;
-                    Debug.Log("Up");
                 }
             }
             else
@@ -340,7 +533,7 @@ public class TowerDefGrid : MonoBehaviour
 
 				if (grid[x, y - 1].GetComponent<GridTile>().road == false && grid[x, y - 1].GetComponent<GridTile>().tower == false)
                 {
-					grid[x, y - 1].GetComponent<SpriteRenderer>().sprite = RoadTile;
+					grid[x, y - 1].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
 					grid[x, y - 1].GetComponent<GridTile>().canBuild = true;
                     grid[x, y - 1].GetComponent<GridTile>().setup = true;
                     towerPointXFour = x;
@@ -350,8 +543,6 @@ public class TowerDefGrid : MonoBehaviour
                 else
                 {
                     towerPointFour = false;
-                    wayDown = false;
-                    Debug.Log("Down");
                 }
             }
             else
@@ -362,15 +553,90 @@ public class TowerDefGrid : MonoBehaviour
 
 
 
+		// Diagonal
 
 
 
-		grid[1, 4].GetComponent<SpriteRenderer>().sprite = RoadTile;
+		if (grid[x + 1, y + 1] != null)
+		{
 
-        if (!wayDown && !wayUp && !wayLeft && !wayRight)
-        {
-            Application.LoadLevel("MathTowerDefTest");
-        }
+			if (grid[x + 1, y + 1].GetComponent<GridTile>().road == false && grid[x + 1, y + 1].GetComponent<GridTile>().tower == false)
+			{
+				grid[x + 1, y + 1].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
+				grid[x + 1, y + 1].GetComponent<GridTile>().canBuild = true;
+				grid[x + 1, y + 1].GetComponent<GridTile>().setup = true;
+				towerPointXFive = x + 1;
+				towerPointYFive = y + 1;
+				towerPointFive = true;
+			}
+			else
+			{
+				towerPointFive = false;
+			}
+
+
+		}
+
+
+		if (grid[x + 1, y - 1] != null)
+		{
+			if (grid[x + 1, y - 1].GetComponent<GridTile>().road == false && grid[x + 1, y - 1].GetComponent<GridTile>().tower == false)
+			{
+				grid[x + 1, y - 1].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
+				grid[x + 1, y - 1].GetComponent<GridTile>().canBuild = true;
+				grid[x + 1, y - 1].GetComponent<GridTile>().setup = true;
+				towerPointXSix = x + 1;
+				towerPointYSix = y - 1;
+				towerPointSix = true;
+			}
+			else
+			{
+				towerPointSix = false;
+			}
+			
+		}
+
+
+		if (grid[x - 1, y + 1] != null)
+		{
+			if (grid[x - 1, y + 1].GetComponent<GridTile>().road == false && grid[x - 1, y + 1].GetComponent<GridTile>().tower == false)
+			{
+				grid[x - 1, y + 1].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
+				grid[x - 1, y + 1].GetComponent<GridTile>().canBuild = true;
+				grid[x - 1, y + 1].GetComponent<GridTile>().setup = true;
+				towerPointXSeven = x - 1;
+				towerPointYSeven = y + 1;
+				towerPointSeven = true;
+			}
+			else
+			{
+				towerPointSeven = false;
+			}
+		}
+
+
+		if (grid[x - 1, y - 1] != null)
+		{
+			if (grid[x - 1, y - 1].GetComponent<GridTile>().road == false && grid[x - 1, y - 1].GetComponent<GridTile>().tower == false)
+			{
+				grid[x - 1, y - 1].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
+				grid[x - 1, y - 1].GetComponent<GridTile>().canBuild = true;
+				grid[x - 1, y - 1].GetComponent<GridTile>().setup = true;
+				towerPointXEight = x - 1;
+				towerPointYEight = y - 1;
+				towerPointEight = true;
+			}
+			else
+			{
+				towerPointEight = false;
+			}
+		}
+
+
+
+		grid[1, 4].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
+
+
 
     }
 
@@ -413,6 +679,42 @@ public class TowerDefGrid : MonoBehaviour
             }
         }
 
+		if (towerPointFive)
+		{
+			if (grid[towerPointXFive, towerPointYFive].GetComponent<GridTile>().canBuild)
+			{
+				grid[towerPointXFive, towerPointYFive].GetComponent<SpriteRenderer>().sprite = TowerTileGrid;
+				grid[towerPointXFive, towerPointYFive].GetComponent<GridTile>().setup = false;
+			}
+		}
+
+		if (towerPointSix)
+		{
+			if (grid[towerPointXSix, towerPointYSix].GetComponent<GridTile>().canBuild)
+			{
+				grid[towerPointXSix, towerPointYSix].GetComponent<SpriteRenderer>().sprite = TowerTileGrid;
+				grid[towerPointXSix, towerPointYSix].GetComponent<GridTile>().setup = false;
+			}
+		}
+
+		if (towerPointSeven)
+		{
+			if (grid[towerPointXSeven, towerPointYSeven].GetComponent<GridTile>().canBuild)
+			{
+				grid[towerPointXSeven, towerPointYSeven].GetComponent<SpriteRenderer>().sprite = TowerTileGrid;
+				grid[towerPointXSeven, towerPointYSeven].GetComponent<GridTile>().setup = false;
+			}
+		}
+
+		if (towerPointEight)
+		{
+			if (grid[towerPointXEight, towerPointYEight].GetComponent<GridTile>().canBuild)
+			{
+				grid[towerPointXEight, towerPointYEight].GetComponent<SpriteRenderer>().sprite = TowerTileGrid;
+				grid[towerPointXEight, towerPointYEight].GetComponent<GridTile>().setup = false;
+			}
+		}
+
     }
 
 
@@ -435,6 +737,11 @@ public class TowerDefGrid : MonoBehaviour
 					grid[x, y].GetComponent<SpriteRenderer>().sprite = GrassTile;
                 }
 
+				if (grid[x, y].GetComponent<SpriteRenderer>().sprite == RoadTileGrid)
+				{
+					grid[x, y].GetComponent<SpriteRenderer>().sprite = RoadTile;
+				}
+
 				if (grid[x, y].GetComponent<SpriteRenderer>().sprite == TowerTileGrid)
                 {
 					grid[x, y].GetComponent<SpriteRenderer>().sprite = TowerTile;
@@ -447,7 +754,14 @@ public class TowerDefGrid : MonoBehaviour
 				}
 
 
+				grid[1, 4].GetComponent<SpriteRenderer>().sprite = RoadTile;
+				grid[14, 11].GetComponent<SpriteRenderer>().sprite = RoadTile;
 
+
+				if (grid[x, y].tag == "Road")
+				{
+					grid[x, y].GetComponent<SpriteRenderer>().sprite = RoadTile;
+				}
 
             }
 
@@ -538,56 +852,93 @@ public class TowerDefGrid : MonoBehaviour
     void SpawnEnemy()
     {
         int random;
-        random = Random.Range(1, 9);
+		bool SpawnUnite = true;
 
-        if (random == 1)
-        {
-            GameObject Enemy2 = (GameObject)Instantiate(enemy2);
-            Enemy2.transform.position = startPos;
-        }
+		while(SpawnUnite) {
 
-        if (random == 2)
-        {
-            GameObject Enemy3 = (GameObject)Instantiate(enemy3);
-			Enemy3.transform.position = startPos;
-        }
+			random = Random.Range(1, 9);
 
-        if (random == 3)
-        {
-            GameObject Enemy4 = (GameObject)Instantiate(enemy4);
-			Enemy4.transform.position = startPos;
-        }
+			if(enemy2Allowed)
+			{
+		        if (random == 1)
+		        {
+		            GameObject Enemy2 = (GameObject)Instantiate(enemy2);
+		            Enemy2.transform.position = startPos;
+					SpawnUnite = false;
+		        }
+			}
 
-        if (random == 4)
-        {
-            GameObject Enemy5 = (GameObject)Instantiate(enemy5);
-			Enemy5.transform.position = startPos;
-        }
+			if(enemy3Allowed)
+			{
+		        if (random == 2)
+		        {
+		            GameObject Enemy3 = (GameObject)Instantiate(enemy3);
+					Enemy3.transform.position = startPos;
+					SpawnUnite = false;
+		        }
+			}
 
-		if (random == 5)
-		{
-			GameObject Enemy6 = (GameObject)Instantiate(enemy6);
-			Enemy6.transform.position = startPos;
+			if(enemy4Allowed)
+			{
+		        if (random == 3)
+		        {
+		            GameObject Enemy4 = (GameObject)Instantiate(enemy4);
+					Enemy4.transform.position = startPos;
+					SpawnUnite = false;
+		        }
+			}
+
+			if(enemy5Allowed)
+			{
+		        if (random == 4)
+		        {
+		            GameObject Enemy5 = (GameObject)Instantiate(enemy5);
+					Enemy5.transform.position = startPos;
+					SpawnUnite = false;
+		        }
+			}
+
+			if(enemy6Allowed)
+			{
+				if (random == 5)
+				{
+					GameObject Enemy6 = (GameObject)Instantiate(enemy6);
+					Enemy6.transform.position = startPos;
+					SpawnUnite = false;
+				}
+			}
+
+			if(enemy7Allowed)
+			{
+				if (random == 6)
+				{
+					GameObject Enemy7 = (GameObject)Instantiate(enemy7);
+					Enemy7.transform.position = startPos;
+					SpawnUnite = false;
+				}
+			}
+
+			if(enemy8Allowed)
+			{
+				if (random == 7)
+				{
+					GameObject Enemy8 = (GameObject)Instantiate(enemy8);
+					Enemy8.transform.position = startPos;
+					SpawnUnite = false;
+				}
+			}
+
+			if(enemy9Allowed)
+			{
+				if (random == 8)
+				{
+					GameObject Enemy9 = (GameObject)Instantiate(enemy9);
+					Enemy9.transform.position = startPos;
+					SpawnUnite = false;
+				}
+			}
+
 		}
-
-		if (random == 6)
-		{
-			GameObject Enemy7 = (GameObject)Instantiate(enemy7);
-			Enemy7.transform.position = startPos;
-		}
-
-		if (random == 7)
-		{
-			GameObject Enemy8 = (GameObject)Instantiate(enemy8);
-			Enemy8.transform.position = startPos;
-		}
-
-		if (random == 8)
-		{
-			GameObject Enemy9 = (GameObject)Instantiate(enemy9);
-			Enemy9.transform.position = startPos;
-		}
-
 
 
       
@@ -1167,6 +1518,7 @@ public class TowerDefGrid : MonoBehaviour
                             if (Enemy.transform.position == grid[x + 1, y].transform.position)
                             {
                                 Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash,Splash.transform.position,Splash.transform.rotation);
 
                             }
                         }
@@ -1182,6 +1534,7 @@ public class TowerDefGrid : MonoBehaviour
                             if (Enemy.transform.position == grid[x - 1, y].transform.position)
                             {
                                 Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
 
                             }
                         }
@@ -1198,6 +1551,7 @@ public class TowerDefGrid : MonoBehaviour
                             if (Enemy.transform.position == grid[x, y + 1].transform.position)
                             {
                                 Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x, y + 1].transform.position, Splash.transform.rotation);
 
                             }
                         }
@@ -1213,6 +1567,7 @@ public class TowerDefGrid : MonoBehaviour
                             if (Enemy.transform.position == grid[x, y - 1].transform.position)
                             {
                                 Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x, y - 1].transform.position, Splash.transform.rotation);
 
                             }
                         }
@@ -1235,6 +1590,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x - 1, y - 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1250,6 +1606,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x - 1, y + 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1266,6 +1623,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x + 1, y + 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1281,6 +1639,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x + 1, y - 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1304,6 +1663,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x + 1, y].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Dead();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1319,6 +1679,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x - 1, y].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Dead();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1335,6 +1696,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x, y + 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Dead();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1350,6 +1712,72 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x, y - 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Dead();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								
+							}
+						}
+					}
+
+					if (grid[x - 1, y - 1] != null)
+					{
+						
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x - 1, y - 1].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								
+							}
+						}
+					}
+					
+					
+					if (grid[x - 1, y + 1] != null)
+					{
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x - 1, y + 1].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								
+							}
+						}
+						
+					}
+					
+					
+					if (grid[x + 1, y + 1] != null)
+					{
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x + 1, y + 1].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								
+							}
+						}
+					}
+					
+					
+					if (grid[x + 1, y - 1] != null)
+					{
+						Enemies = GameObject.FindGameObjectsWithTag("Enemy");
+						
+						foreach (GameObject Enemy in Enemies)
+						{
+							if (Enemy.transform.position == grid[x + 1, y - 1].transform.position)
+							{
+								Enemy.GetComponent<Enemy>().Damage();
+								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
 								
 							}
 						}

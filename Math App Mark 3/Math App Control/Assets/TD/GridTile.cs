@@ -18,6 +18,13 @@ public class GridTile : MonoBehaviour
 	public bool towerSnipe; //Tower Instant Removes a flower
 	bool towerBuild;
 
+	GameObject TowerOne;
+	GameObject TowerTwo;
+	GameObject TowerThree;
+
+	GameObject CurrentTower;
+
+
 	public bool tower;
 	public bool road;
 	public bool grass;
@@ -30,6 +37,7 @@ public class GridTile : MonoBehaviour
 	public Sprite TowerTile;
 	public Sprite TowerTileGrid;
 	public Sprite RoadTile;
+	public Sprite RoadTileGrid;
 
 	float fadeSpeed = 1f;
 	float fadeTime = 10f;
@@ -56,7 +64,10 @@ public class GridTile : MonoBehaviour
 		towerVandH = false;
 		towerSnipe = false;
 
-
+		TowerOne = (GameObject) Resources.Load("TowerOne", typeof(GameObject));
+		TowerTwo = (GameObject) Resources.Load("TowerTwo", typeof(GameObject));
+		TowerThree = (GameObject) Resources.Load("TowerThree", typeof(GameObject));
+			
 
 
 
@@ -149,9 +160,24 @@ public class GridTile : MonoBehaviour
     }
 
   
+	public void LevelGen() 
+	{
+		Control.GetComponent<TowerDefGrid>().tileNumber = Control.GetComponent<TowerDefGrid>().tileNumber + 1;
+		gameObject.GetComponentInChildren<TextMesh>().text = Control.GetComponent<TowerDefGrid>().tileNumber.ToString();
+		tileNumber = Control.GetComponent<TowerDefGrid>().tileNumber + 1;
+		BuildRoad();
+		gameObject.layer = 9;
+		Destroy(gameObject.GetComponent<BoxCollider2D>());
+		gameObject.tag = "Road";
 
+	}
 
-
+	public void ChangeToRoad()
+	{
+		gameObject.GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
+	}
+	
+	
 	public void BuildRoad() 
 	{
 		Control.GetComponent<TowerDefGrid>().Road(posX, posY);
@@ -173,6 +199,7 @@ public class GridTile : MonoBehaviour
 				towerVandH = false;
 				towerSnipe = false;
 				gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+				Destroy(CurrentTower);
 
             }
         }
@@ -181,7 +208,7 @@ public class GridTile : MonoBehaviour
 
 	public void BuildTowerVandH() {
 
-		gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+		CurrentTower = Instantiate(TowerOne,gameObject.transform.position,TowerOne.transform.rotation) as GameObject;
 		towerVandH = true;
 		Control.GetComponent<TowerDefGrid>().buildTower = false;
 		towerTurnLeft = 3;
@@ -195,7 +222,7 @@ public class GridTile : MonoBehaviour
 
 	public void BuildTowerD() {
 
-		gameObject.GetComponent<SpriteRenderer>().color = Color.grey;
+		CurrentTower = Instantiate(TowerTwo,gameObject.transform.position,TowerTwo.transform.rotation) as GameObject;
 		towerD = true;
 		Control.GetComponent<TowerDefGrid>().buildTower = false;
 		towerTurnLeft = 3;
@@ -206,7 +233,7 @@ public class GridTile : MonoBehaviour
 
 	public void BuildTowerSnipe() {
 
-		gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+		CurrentTower = Instantiate(TowerThree,gameObject.transform.position,TowerThree.transform.rotation) as GameObject;
 		towerSnipe = true;
 		Control.GetComponent<TowerDefGrid>().buildTower = false;
 		towerTurnLeft = 1;
