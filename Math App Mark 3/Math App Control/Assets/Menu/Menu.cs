@@ -6,10 +6,17 @@ public class Menu : MonoBehaviour {
     public GameObject highScore;
     public GameObject options;
 
+	public GameObject LevelSelect;
+	public GameObject MainMenu;
+
 	// Use this for initialization
 	void Start () {
-        highScore.SetActive(false);
+        
+		MainMenu.SetActive(true);
+
+		highScore.SetActive(false);
         options.SetActive(false);
+		LevelSelect.SetActive(false);
 
         if(PlayerPrefs.GetString("New") != "No")
         {
@@ -26,11 +33,18 @@ public class Menu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+		if(Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
+
+
 	}
 
     public void Play ()
     {
-        Application.LoadLevel("MathTowerDefTest");
+		MainMenu.SetActive(false);
+		LevelSelect.SetActive(true);
     }
 
     public void HighScore ()
@@ -43,8 +57,37 @@ public class Menu : MonoBehaviour {
         options.SetActive(true);
     }
 
+
+	public void Back ()
+	{
+		LevelSelect.SetActive(false);
+		MainMenu.SetActive(true);
+	}
+
     public void Exit()
     {
         Application.Quit();
     }
+
+
+
+	public void LevelOne()
+	{
+		Application.LoadLevel("LevelOne");
+	}
+
+	public void LevelTwo()
+	{
+		Application.LoadLevel("LevelTwo");
+	}
+
+	public void LevelThree()
+	{
+		Application.LoadLevel("LevelThree");
+	}
+
+	public void LevelSandbox()
+	{
+		Application.LoadLevel("LevelSandbox");
+	}
 }

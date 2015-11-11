@@ -13,8 +13,9 @@ public class Enemy : MonoBehaviour {
     GameObject escape;
     GameObject grid;
 
-	//A*
-
+	public GameObject lifeOne;
+	public GameObject lifeTwo;
+	public GameObject lifeThree;
 
 
 	float speed = 5;
@@ -51,6 +52,29 @@ public class Enemy : MonoBehaviour {
         {
             Escape();
         }
+
+
+		if(life == 3)
+		{
+			lifeOne.SetActive(true);
+			lifeTwo.SetActive(true);
+			lifeThree.SetActive(true);
+		}
+		
+		if(life == 2)
+		{
+			lifeOne.SetActive(false);
+			lifeTwo.SetActive(true);
+			lifeThree.SetActive(true);
+		}
+		
+		if(life == 1)
+		{
+			lifeOne.SetActive(false);
+			lifeTwo.SetActive(false);
+			lifeThree.SetActive(true);
+		}
+
 
         if (life == 0)
         {
@@ -407,6 +431,7 @@ public class Enemy : MonoBehaviour {
 
     public void Dead()
     {
+		grid.GetComponent<TowerDefGrid>().EnemyKilled();
         Destroy(gameObject);
     }
 

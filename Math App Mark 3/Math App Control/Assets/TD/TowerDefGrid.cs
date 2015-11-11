@@ -9,6 +9,7 @@ public class TowerDefGrid : MonoBehaviour
 
     public GameObject timer;
 	public GameObject message;
+	public GameObject enemyLeft;
 
     GameObject gridTileStart;
     GameObject gridTileEnd;
@@ -112,6 +113,8 @@ public class TowerDefGrid : MonoBehaviour
 	// Enemy
 	public Vector2 startPos;
 
+	int EnemyDead;
+
 
     // Life
     public int life;
@@ -125,8 +128,7 @@ public class TowerDefGrid : MonoBehaviour
 	public bool levelOne;
 	public bool levelTwo;
 	public bool levelThree;
-	public bool levelFour;
-	public bool levelFive;
+
 
 	public bool levelSandbox;
 
@@ -140,6 +142,7 @@ public class TowerDefGrid : MonoBehaviour
         waitingRound = false;
         buildTower = false;
         life = 3;
+		EnemyDead = 20;
 
 
 		if(levelOne)
@@ -169,50 +172,28 @@ public class TowerDefGrid : MonoBehaviour
 		if(levelThree)
 		{
 			enemy2Allowed = false;
-			enemy3Allowed = false;
-			enemy4Allowed = false;
+			enemy3Allowed = true;
+			enemy4Allowed = true;
 			enemy5Allowed = true;
-			enemy6Allowed = false;
+			enemy6Allowed = true;
 			enemy7Allowed = false;
 			enemy8Allowed = false;
 			enemy9Allowed = false;
 			
 		}
 
-		if(levelFour)
-		{
-			enemy2Allowed = false;
-			enemy3Allowed = false;
-			enemy4Allowed = true;
-			enemy5Allowed = false;
-			enemy6Allowed = false;
-			enemy7Allowed = false;
-			enemy8Allowed = true;
-			enemy9Allowed = false;
-		}
+	
 
-		if(levelFive)
+		if(levelSandbox)
 		{
 			enemy2Allowed = false;
 			enemy3Allowed = false;
 			enemy4Allowed = false;
-			enemy5Allowed = true;
+			enemy5Allowed = false;
 			enemy6Allowed = false;
-			enemy7Allowed = true;
+			enemy7Allowed = false;
 			enemy8Allowed = false;
 			enemy9Allowed = false;
-		}
-
-		if(levelSandbox)
-		{
-			enemy2Allowed = true;
-			enemy3Allowed = true;
-			enemy4Allowed = true;
-			enemy5Allowed = true;
-			enemy6Allowed = true;
-			enemy7Allowed = true;
-			enemy8Allowed = true;
-			enemy9Allowed = true;
 		}
 
 
@@ -244,13 +225,29 @@ public class TowerDefGrid : MonoBehaviour
 		grid[14, 11].GetComponent<GridTile>().road = true;
 
 
+
+
+
 		Invoke("Build", 0.01f);
     }
 
     // Update is called once per frame
     void Update()
     {
+
+		enemyLeft.GetComponent<Text>().text = EnemyDead.ToString();
+
+		if(Input.GetKey(KeyCode.Space)) {
+			EnemyDead = 1;
+		}
+
         
+		if(EnemyDead == 0)
+		{
+			UI.GetComponent<UIControl>().Win();
+		}
+
+
 
         if (roundBuild)
         {
@@ -332,7 +329,7 @@ public class TowerDefGrid : MonoBehaviour
 
         if(life == 0)
         {
-            Application.LoadLevel(LevelToLoad);
+			UI.GetComponent<UIControl>().Lost();
         }
 
 
@@ -375,6 +372,7 @@ public class TowerDefGrid : MonoBehaviour
 			grid[12, 11].GetComponent<GridTile>().LevelGen();
 			grid[13, 11].GetComponent<GridTile>().LevelGen();
 
+
 			Roads = GameObject.FindGameObjectsWithTag("Road");
 			
 			foreach (GameObject Road in Roads)
@@ -386,23 +384,91 @@ public class TowerDefGrid : MonoBehaviour
 		
 		if(levelTwo) 
 		{
-			Road(1, 4);
+			grid[2, 4].GetComponent<GridTile>().LevelGen();
+			grid[3, 3].GetComponent<GridTile>().LevelGen();
+			grid[4, 4].GetComponent<GridTile>().LevelGen();
+			grid[5, 4].GetComponent<GridTile>().LevelGen();
+			grid[5, 5].GetComponent<GridTile>().LevelGen();
+			grid[4, 6].GetComponent<GridTile>().LevelGen();
+			grid[5, 7].GetComponent<GridTile>().LevelGen();
+			grid[5, 8].GetComponent<GridTile>().LevelGen();
+			grid[4, 8].GetComponent<GridTile>().LevelGen();
+			grid[3, 9].GetComponent<GridTile>().LevelGen();
+			grid[2, 10].GetComponent<GridTile>().LevelGen();
+			grid[3, 11].GetComponent<GridTile>().LevelGen();
+			grid[4, 12].GetComponent<GridTile>().LevelGen();
+			grid[5, 11].GetComponent<GridTile>().LevelGen();
+			grid[6, 10].GetComponent<GridTile>().LevelGen();
+			grid[7, 10].GetComponent<GridTile>().LevelGen();
+			grid[8, 10].GetComponent<GridTile>().LevelGen();
+			grid[8, 9].GetComponent<GridTile>().LevelGen();
+			grid[8, 8].GetComponent<GridTile>().LevelGen();
+			grid[9, 8].GetComponent<GridTile>().LevelGen();
+			grid[10, 9].GetComponent<GridTile>().LevelGen();
+			grid[10, 10].GetComponent<GridTile>().LevelGen();
+			grid[10, 11].GetComponent<GridTile>().LevelGen();
+			grid[10, 12].GetComponent<GridTile>().LevelGen();
+			grid[11, 13].GetComponent<GridTile>().LevelGen();
+			grid[12, 12].GetComponent<GridTile>().LevelGen();
+			grid[12, 11].GetComponent<GridTile>().LevelGen();
+			grid[13, 11].GetComponent<GridTile>().LevelGen();
+
+			
+			Roads = GameObject.FindGameObjectsWithTag("Road");
+			
+			foreach (GameObject Road in Roads)
+			{
+				Road.GetComponent<GridTile>().ChangeToRoad();
+			}
 		}
 
 		if(levelThree) 
 		{
-			Road(1, 4);
+			grid[1, 4].GetComponent<GridTile>().LevelGen();
+			grid[2, 3].GetComponent<GridTile>().LevelGen();
+			grid[3, 4].GetComponent<GridTile>().LevelGen();
+			grid[4, 5].GetComponent<GridTile>().LevelGen();
+			grid[4, 6].GetComponent<GridTile>().LevelGen();
+			grid[4, 7].GetComponent<GridTile>().LevelGen();
+			grid[5, 7].GetComponent<GridTile>().LevelGen();
+			grid[6, 7].GetComponent<GridTile>().LevelGen();
+			grid[6, 6].GetComponent<GridTile>().LevelGen();
+			grid[6, 5].GetComponent<GridTile>().LevelGen();
+			grid[7, 4].GetComponent<GridTile>().LevelGen();
+			grid[8, 4].GetComponent<GridTile>().LevelGen();
+			grid[9, 3].GetComponent<GridTile>().LevelGen();
+			grid[10, 4].GetComponent<GridTile>().LevelGen();
+			grid[9, 5].GetComponent<GridTile>().LevelGen();
+			grid[9, 6].GetComponent<GridTile>().LevelGen();
+			grid[9, 7].GetComponent<GridTile>().LevelGen();
+			grid[10, 7].GetComponent<GridTile>().LevelGen();
+			grid[11, 6].GetComponent<GridTile>().LevelGen();
+			grid[12, 6].GetComponent<GridTile>().LevelGen();
+			grid[12, 7].GetComponent<GridTile>().LevelGen();
+			grid[12, 8].GetComponent<GridTile>().LevelGen();
+			grid[12, 9].GetComponent<GridTile>().LevelGen();
+			grid[11, 9].GetComponent<GridTile>().LevelGen();
+			grid[10, 9].GetComponent<GridTile>().LevelGen();
+			grid[9, 9].GetComponent<GridTile>().LevelGen();
+			grid[8, 9].GetComponent<GridTile>().LevelGen();
+			grid[8, 10].GetComponent<GridTile>().LevelGen();
+			grid[8, 11].GetComponent<GridTile>().LevelGen();
+			grid[9, 11].GetComponent<GridTile>().LevelGen();
+			grid[10, 11].GetComponent<GridTile>().LevelGen();
+			grid[11, 11].GetComponent<GridTile>().LevelGen();
+			grid[12, 11].GetComponent<GridTile>().LevelGen();
+			grid[13, 11].GetComponent<GridTile>().LevelGen();
+			
+			
+			Roads = GameObject.FindGameObjectsWithTag("Road");
+			
+			foreach (GameObject Road in Roads)
+			{
+				Road.GetComponent<GridTile>().ChangeToRoad();
+			}
 		}
 
-		if(levelFour) 
-		{
-			Road(1, 4);
-		}
-
-		if(levelFive) 
-		{
-			Road(1, 4);
-		}
+	
 
 		if(levelSandbox) 
 		{
@@ -438,7 +504,7 @@ public class TowerDefGrid : MonoBehaviour
 
         Towerblock();
 
-
+		Debug.Log(x + " " + y);
 
 		// Horizontal and Vertical
 
@@ -635,6 +701,8 @@ public class TowerDefGrid : MonoBehaviour
 
 
 		grid[1, 4].GetComponent<SpriteRenderer>().sprite = RoadTileGrid;
+		grid[1, 4].GetComponent<GridTile>().canBuild = false;
+
 
 
 
@@ -642,6 +710,9 @@ public class TowerDefGrid : MonoBehaviour
 
     public void Towerblock()
     {
+
+
+
 
         if (towerPointOne)
         {
@@ -715,6 +786,23 @@ public class TowerDefGrid : MonoBehaviour
 			}
 		}
 
+
+		gridWidth = 14;
+		gridHeight = 14;
+		
+		
+		for (int x = 2; x < gridWidth; x++)
+		{
+			for (int y = 2; y < gridWidth; y++)
+			{
+				
+				grid[x, y].GetComponent<GridTile>().canBuild = false;
+				grid[x, y].GetComponent<SpriteRenderer>().color = new Color(1f,1f,1f,1f);
+				
+			}
+			
+		}
+
     }
 
 
@@ -722,6 +810,7 @@ public class TowerDefGrid : MonoBehaviour
     {
         UI.GetComponent<UIControl>().EndMaze();
         UI.GetComponent<UIControl>().BeginGame();
+		Towerblock();
 		
         gridTileEnd.GetComponent<GridTile>().tileNumber = tileNumber + 1;
 
@@ -751,6 +840,7 @@ public class TowerDefGrid : MonoBehaviour
 				{
 					grid[x, y].GetComponent<SpriteRenderer>().sprite = TowerTile;
 					grid[x, y].GetComponent<SpriteRenderer>().color = new Color(1f,1f,1f,1f);
+					grid[x, y].GetComponent<GridTile>().canBuild = false;
 				}
 
 
@@ -781,7 +871,7 @@ public class TowerDefGrid : MonoBehaviour
     void NewRound()
     {
         Debug.Log("New Round");
-        roundTime = 5;
+        roundTime = 20;
         roundBuild = true;
         towerRound = false;
         reduceTime = true;
@@ -816,6 +906,7 @@ public class TowerDefGrid : MonoBehaviour
 
 
         buildTower = false;
+		UI.GetComponent<UIControl>().SelectNone();
     }
 
     void TowerRound()
@@ -848,6 +939,11 @@ public class TowerDefGrid : MonoBehaviour
         --towerTime;
         reduceTowerTime = true;
     }
+
+	public void TowerPlaced() 
+	{
+		roundTime = 1;
+	}
 
     void SpawnEnemy()
     {
@@ -943,6 +1039,126 @@ public class TowerDefGrid : MonoBehaviour
 
       
     }
+
+
+	public void TabelTwo() {
+
+		if(enemy2Allowed)
+		{
+			enemy2Allowed = false;
+		}
+
+		if(!enemy2Allowed)
+		{
+			enemy2Allowed = true;
+		}
+
+	}
+	
+	public void TabelThree() {
+
+		if(enemy3Allowed)
+		{
+			enemy3Allowed = false;
+		}
+		
+		if(!enemy3Allowed)
+		{
+			enemy3Allowed = true;
+		}
+		
+	}
+
+	public void TabelFour() {
+
+		if(enemy4Allowed)
+		{
+			enemy4Allowed = false;
+		}
+		
+		if(!enemy4Allowed)
+		{
+			enemy4Allowed = true;
+		}
+		
+	}
+
+	public void TabelFive() {
+
+		if(enemy5Allowed)
+		{
+			enemy5Allowed = false;
+		}
+		
+		if(!enemy5Allowed)
+		{
+			enemy5Allowed = true;
+		}
+		
+	}
+
+	public void TabelSix() {
+
+		if(enemy6Allowed)
+		{
+			enemy6Allowed = false;
+		}
+		
+		if(!enemy6Allowed)
+		{
+			enemy6Allowed = true;
+		}
+		
+	}
+
+	public void TabelSeven() {
+
+		if(enemy7Allowed)
+		{
+			enemy7Allowed = false;
+		}
+		
+		if(!enemy7Allowed)
+		{
+			enemy7Allowed = true;
+		}
+		
+	}
+
+	public void TabelEight() {
+
+		if(enemy8Allowed)
+		{
+			enemy8Allowed = false;
+		}
+		
+		if(!enemy8Allowed)
+		{
+			enemy8Allowed = true;
+		}
+		
+	}
+
+	public void TabelNine() {
+
+		if(enemy9Allowed)
+		{
+			enemy9Allowed = false;
+		}
+		
+		if(!enemy9Allowed)
+		{
+			enemy9Allowed = true;
+		}
+		
+	}
+
+
+	public void EnemyKilled()
+	{
+		--EnemyDead;
+	}
+
 
     void MoveEnemy()
     {
@@ -1606,7 +1822,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x - 1, y + 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x - 1, y + 1].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1623,7 +1839,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x + 1, y + 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x + 1, y + 1].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1639,7 +1855,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x + 1, y - 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x + 1, y - 1].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1663,7 +1879,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x + 1, y].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Dead();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x + 1, y].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1696,7 +1912,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x, y + 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Dead();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x, y + 1].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1712,7 +1928,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x, y - 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Dead();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x, y - 1].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1728,7 +1944,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x - 1, y - 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x - 1, y - 1].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1744,7 +1960,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x - 1, y + 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x - 1, y + 1].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1761,7 +1977,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x + 1, y + 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x + 1, y + 1].transform.position, Splash.transform.rotation);
 								
 							}
 						}
@@ -1777,7 +1993,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x + 1, y - 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x + 1, y - 1].transform.position, Splash.transform.rotation);
 								
 							}
 						}

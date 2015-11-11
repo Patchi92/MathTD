@@ -18,6 +18,11 @@ public class GridTile : MonoBehaviour
 	public bool towerSnipe; //Tower Instant Removes a flower
 	bool towerBuild;
 
+
+	public GameObject InfoVandH;
+	public GameObject InfoD;
+	public GameObject InfoSnipe;
+
 	GameObject TowerOne;
 	GameObject TowerTwo;
 	GameObject TowerThree;
@@ -40,7 +45,6 @@ public class GridTile : MonoBehaviour
 	public Sprite RoadTileGrid;
 
 	float fadeSpeed = 1f;
-	float fadeTime = 10f;
 	float fadeColor;
 	bool fadeIn;
 	float fade;
@@ -54,6 +58,7 @@ public class GridTile : MonoBehaviour
         Control = GameObject.FindGameObjectWithTag("Grid");
 		Render = gameObject.GetComponent<SpriteRenderer>();
 
+
 		grass = true;
 		canBuild = false;
 		road = false;
@@ -64,8 +69,8 @@ public class GridTile : MonoBehaviour
 		towerVandH = false;
 		towerSnipe = false;
 
-		TowerOne = (GameObject) Resources.Load("TowerOne", typeof(GameObject));
-		TowerTwo = (GameObject) Resources.Load("TowerTwo", typeof(GameObject));
+		TowerOne = (GameObject) Resources.Load("NewTower", typeof(GameObject));
+		TowerTwo = (GameObject) Resources.Load("NewTowerTwo", typeof(GameObject));
 		TowerThree = (GameObject) Resources.Load("TowerThree", typeof(GameObject));
 			
 
@@ -78,25 +83,53 @@ public class GridTile : MonoBehaviour
     {
 
 
-        /*
+
+
+		if(UI.GetComponent<UIControl>().buildFade && gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile)
+		{
+			
+			if (!fadeIn) {
+				Render.color = Color.Lerp(Render.color, Color.white, fadeSpeed * Time.deltaTime);
+			}
+			
+			if (fadeIn) {
+				Render.color = Color.Lerp(Render.color, Color.clear, fadeSpeed * Time.deltaTime);
+			}
+			
+			if(Render.color.a >= 0.90f) {
+				fadeIn = true;
+			}
+			
+			if(Render.color.a <= 0.60f) {
+				fadeIn = false;
+			}
+			
+			Debug.Log("Fade");
+			
+		}
+		
+
+
+
+
+
+        
 		if(canBuild)
 		{
 
 			if (!fadeIn) {
-				fade = Mathf.SmoothDamp(0f,1f,ref fadeSpeed,fadeTime);
-				Render.color = new Color(1f,1f,1f,fade);
+				Render.color = Color.Lerp(Render.color, Color.white, fadeSpeed * Time.deltaTime);
 			}
 			
 			if (fadeIn) {
-				fade = Mathf.SmoothDamp(1f,0f,ref fadeSpeed,fadeTime);
-				Render.color = new Color(1f,1f,1f,fade);
+				Render.color = Color.Lerp(Render.color, Color.clear, fadeSpeed * Time.deltaTime);
 			}
 
-			if(Render.color.a == 1f) {
+			if(Render.color.a >= 0.90f) {
 				fadeIn = true;
 			}
 
-			if(Render.color.a == 0f) {
+			if(Render.color.a <= 0.60f) {
 				fadeIn = false;
 			}
 
@@ -104,13 +137,38 @@ public class GridTile : MonoBehaviour
 
 		}
 
-		if(!canBuild)
+		if(!canBuild && !UI.GetComponent<UIControl>().buildFade)
 		{
 			gameObject.GetComponent<SpriteRenderer>().color = new Color(1f,1f,1f,1f);
 		}
 
-		*/
+
     }
+
+	void OnMouseOver() 
+	{
+		if(UI.GetComponent<UIControl>().selectedTowerVandH && gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile)
+		{
+			InfoVandH.SetActive(true);
+		}
+
+		if(UI.GetComponent<UIControl>().selectedTowerD && gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile)
+		{
+			InfoD.SetActive(true);
+		}
+
+		if(UI.GetComponent<UIControl>().selectedTowerSnipe && gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile)
+		{
+			InfoSnipe.SetActive(true);
+		}
+	}
+	
+	void OnMouseExit()
+	{
+		InfoVandH.SetActive(false);
+		InfoD.SetActive(false);
+		InfoSnipe.SetActive(false);
+	}
 
 
     void OnMouseDown()
@@ -151,8 +209,11 @@ public class GridTile : MonoBehaviour
 					BuildTowerSnipe();
 				}
 
-
+				UI.GetComponent<UIControl>().SelectNone();
+				Control.GetComponent<TowerDefGrid>().TowerPlaced();
             }
+
+
 
         }
 
@@ -192,6 +253,7 @@ public class GridTile : MonoBehaviour
         if (towerBuild)
         {
             --towerTurnLeft;
+			--CurrentTower.GetComponent<TowerInfo>().turnsLeft;
 
             if (towerTurnLeft == 0)
             {
@@ -212,6 +274,7 @@ public class GridTile : MonoBehaviour
 		towerVandH = true;
 		Control.GetComponent<TowerDefGrid>().buildTower = false;
 		towerTurnLeft = 3;
+		CurrentTower.GetComponent<TowerInfo>().turnsLeft = 3;
 
 		towerBuild = true;
 
@@ -226,6 +289,7 @@ public class GridTile : MonoBehaviour
 		towerD = true;
 		Control.GetComponent<TowerDefGrid>().buildTower = false;
 		towerTurnLeft = 3;
+		CurrentTower.GetComponent<TowerInfo>().turnsLeft = 3;
 
 		towerBuild = true;
 		
@@ -237,6 +301,7 @@ public class GridTile : MonoBehaviour
 		towerSnipe = true;
 		Control.GetComponent<TowerDefGrid>().buildTower = false;
 		towerTurnLeft = 1;
+		CurrentTower.GetComponent<TowerInfo>().turnsLeft = 1;
 
 		towerBuild = true;
 	}
