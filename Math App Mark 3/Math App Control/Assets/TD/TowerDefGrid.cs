@@ -237,9 +237,7 @@ public class TowerDefGrid : MonoBehaviour
 
 		enemyLeft.GetComponent<Text>().text = EnemyDead.ToString();
 
-		if(Input.GetKey(KeyCode.Space)) {
-			EnemyDead = 1;
-		}
+
 
         
 		if(EnemyDead == 0)
@@ -504,7 +502,6 @@ public class TowerDefGrid : MonoBehaviour
 
         Towerblock();
 
-		Debug.Log(x + " " + y);
 
 		// Horizontal and Vertical
 
@@ -871,7 +868,7 @@ public class TowerDefGrid : MonoBehaviour
     void NewRound()
     {
         Debug.Log("New Round");
-        roundTime = 20;
+        roundTime = 30;
         roundBuild = true;
         towerRound = false;
         reduceTime = true;
@@ -898,7 +895,7 @@ public class TowerDefGrid : MonoBehaviour
     void WaitRound()
     {
         Debug.Log("Wait Round");
-        waitingTime = 3;
+        waitingTime = 4;
         waitingRound = true;
         roundBuild = false;
         reduceWaitngTime = true;
@@ -907,6 +904,20 @@ public class TowerDefGrid : MonoBehaviour
 
         buildTower = false;
 		UI.GetComponent<UIControl>().SelectNone();
+
+
+		gridWidth = 14;
+		gridHeight = 14;
+		
+		for (int x = 2; x < gridWidth; x++)
+		{
+			for (int y = 2; y < gridWidth; y++)
+			{
+				grid[x,y].GetComponent<GridTile>().canRepair = false;
+			}
+			
+		}
+
     }
 
     void TowerRound()
@@ -942,7 +953,7 @@ public class TowerDefGrid : MonoBehaviour
 
 	public void TowerPlaced() 
 	{
-		roundTime = 1;
+		roundTime = 0;
 	}
 
     void SpawnEnemy()
@@ -1201,7 +1212,9 @@ public class TowerDefGrid : MonoBehaviour
 
 						if (grid[x, y].GetComponent<GridTile>().tileNumber == Enemy.GetComponent<Enemy>().currentStep + 2)
                         {
-                            Coord[2] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
+                        
+							Coord[2] = new Vector2(grid[x, y].transform.position.x, grid[x, y].transform.position.y);
+
                         }
 
                     }
@@ -1806,7 +1819,7 @@ public class TowerDefGrid : MonoBehaviour
 							if (Enemy.transform.position == grid[x - 1, y - 1].transform.position)
 							{
 								Enemy.GetComponent<Enemy>().Damage();
-								Instantiate(Splash, grid[x - 1, y].transform.position, Splash.transform.rotation);
+								Instantiate(Splash, grid[x - 1, y - 1].transform.position, Splash.transform.rotation);
 								
 							}
 						}

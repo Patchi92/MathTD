@@ -12,6 +12,7 @@ public class UIControl : MonoBehaviour {
 	public GameObject lostGame;
 
 	public Texture2D normalMouse;
+	public Texture2D repairMouse;
 	public Texture2D towerVandHMouse;
 	public Texture2D towerDMouse;
 	public Texture2D towerSnipeMouse;
@@ -153,7 +154,30 @@ public class UIControl : MonoBehaviour {
 		buildFade = false;
 	}
 
+	public void NormalMouse() {
 
+		if(selectedTowerVandH)
+		{
+			Cursor.SetCursor(towerVandHMouse, clickSpot, cursorMode);
+
+		} else if (selectedTowerD) 
+		{
+			Cursor.SetCursor(towerDMouse, clickSpot, cursorMode);
+
+		} else if (selectedTowerSnipe)
+		{
+			Cursor.SetCursor(towerSnipeMouse, clickSpot, cursorMode);
+
+		} else {
+
+			Cursor.SetCursor(normalMouse, clickSpot, cursorMode);
+		}
+	}
+
+	public void RepairMouse() {
+
+		Cursor.SetCursor(repairMouse, clickSpot, cursorMode);
+	}
 
 
 

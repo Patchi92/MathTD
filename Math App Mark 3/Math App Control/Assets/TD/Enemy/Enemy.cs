@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour {
 	public GameObject lifeThree;
 
 
-	float speed = 5;
+	float speed = 4;
 	
 	public Vector2[] path;
 

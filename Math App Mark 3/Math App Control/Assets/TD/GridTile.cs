@@ -10,6 +10,7 @@ public class GridTile : MonoBehaviour
     public int posX;
     public int posY;
     public int tileNumber;
+	public bool inUse;
   
 
 	GameObject UI;
@@ -36,6 +37,8 @@ public class GridTile : MonoBehaviour
 	public bool canBuild;
 
     int towerTurnLeft;
+	public bool canRepair;
+	bool repair;
 
 	public Sprite GrassTile;
 	public Sprite GrassTileGrid;
@@ -58,20 +61,21 @@ public class GridTile : MonoBehaviour
         Control = GameObject.FindGameObjectWithTag("Grid");
 		Render = gameObject.GetComponent<SpriteRenderer>();
 
-
+		inUse = false;
 		grass = true;
 		canBuild = false;
 		road = false;
 		tower = false;
 		towerBuild = false;
+		repair = false;
 
 		towerD = false;
 		towerVandH = false;
 		towerSnipe = false;
 
-		TowerOne = (GameObject) Resources.Load("NewTower", typeof(GameObject));
-		TowerTwo = (GameObject) Resources.Load("NewTowerTwo", typeof(GameObject));
-		TowerThree = (GameObject) Resources.Load("TowerThree", typeof(GameObject));
+		TowerOne = (GameObject) Resources.Load("TowerVH", typeof(GameObject));
+		TowerTwo = (GameObject) Resources.Load("TowerD", typeof(GameObject));
+		TowerThree = (GameObject) Resources.Load("TowerSnipe", typeof(GameObject));
 			
 
 
@@ -104,8 +108,7 @@ public class GridTile : MonoBehaviour
 				fadeIn = false;
 			}
 			
-			Debug.Log("Fade");
-			
+	
 		}
 		
 
@@ -147,20 +150,41 @@ public class GridTile : MonoBehaviour
 
 	void OnMouseOver() 
 	{
-		if(UI.GetComponent<UIControl>().selectedTowerVandH && gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile)
+		if(UI.GetComponent<UIControl>().selectedTowerVandH && gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile && !towerBuild)
 		{
 			InfoVandH.SetActive(true);
 		}
 
-		if(UI.GetComponent<UIControl>().selectedTowerD && gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile)
+		if(UI.GetComponent<UIControl>().selectedTowerD && gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile && !towerBuild)
 		{
 			InfoD.SetActive(true);
 		}
 
-		if(UI.GetComponent<UIControl>().selectedTowerSnipe && gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile)
+		if(UI.GetComponent<UIControl>().selectedTowerSnipe && gameObject.GetComponent<SpriteRenderer>().sprite == TowerTile && !towerBuild)
 		{
 			InfoSnipe.SetActive(true);
 		}
+
+
+		if(towerVandH)
+		{
+			InfoVandH.SetActive(true);
+			UI.GetComponent<UIControl>().RepairMouse();
+		}
+
+		if(towerD) 
+		{
+			InfoD.SetActive(true);
+			UI.GetComponent<UIControl>().RepairMouse();
+		}
+
+
+		if(towerSnipe)
+		{
+			InfoSnipe.SetActive(true);
+			UI.GetComponent<UIControl>().RepairMouse();
+		}
+
 	}
 	
 	void OnMouseExit()
@@ -168,6 +192,8 @@ public class GridTile : MonoBehaviour
 		InfoVandH.SetActive(false);
 		InfoD.SetActive(false);
 		InfoSnipe.SetActive(false);
+
+		UI.GetComponent<UIControl>().NormalMouse();
 	}
 
 
@@ -187,6 +213,18 @@ public class GridTile : MonoBehaviour
 			Destroy(gameObject.GetComponent<BoxCollider2D>());
             setup = false;
         }
+
+
+		if(canRepair)
+		{
+			if(repair) 
+			{
+				CurrentTower.GetComponent<TowerInfo>().turnsLeft = 3;
+				towerTurnLeft = 3;
+				
+				Control.GetComponent<TowerDefGrid>().TowerPlaced();
+			}
+		}
 
 
         if(Control.GetComponent<TowerDefGrid>().buildTower)
@@ -216,6 +254,8 @@ public class GridTile : MonoBehaviour
 
 
         }
+
+
 
 
     }
@@ -254,12 +294,16 @@ public class GridTile : MonoBehaviour
         {
             --towerTurnLeft;
 			--CurrentTower.GetComponent<TowerInfo>().turnsLeft;
+			canRepair = true;
 
             if (towerTurnLeft == 0)
             {
 				towerD = false;
 				towerVandH = false;
 				towerSnipe = false;
+				towerBuild = false;
+				repair = false;
+				inUse = false;
 				gameObject.GetComponent<SpriteRenderer>().color = Color.white;
 				Destroy(CurrentTower);
 
@@ -277,7 +321,7 @@ public class GridTile : MonoBehaviour
 		CurrentTower.GetComponent<TowerInfo>().turnsLeft = 3;
 
 		towerBuild = true;
-
+		repair = true;
 	
 
 	}
@@ -292,6 +336,7 @@ public class GridTile : MonoBehaviour
 		CurrentTower.GetComponent<TowerInfo>().turnsLeft = 3;
 
 		towerBuild = true;
+		repair = true;
 		
 	}
 
@@ -304,5 +349,6 @@ public class GridTile : MonoBehaviour
 		CurrentTower.GetComponent<TowerInfo>().turnsLeft = 1;
 
 		towerBuild = true;
+		repair = true;
 	}
 }

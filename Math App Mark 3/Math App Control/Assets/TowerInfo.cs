@@ -2,8 +2,7 @@
 using System.Collections;
 
 public class TowerInfo : MonoBehaviour {
-
-	public GameObject Info;
+	
 	public GameObject HammerOne;
 	public GameObject HammerTwo;
 	public GameObject HammerThree;
@@ -12,8 +11,7 @@ public class TowerInfo : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
-		Info.SetActive(false);
+
 	}
 	
 	// Update is called once per frame
@@ -47,13 +45,5 @@ public class TowerInfo : MonoBehaviour {
 
 	}
 
-	void OnMouseOver() 
-	{
-		Info.SetActive(true);
-	}
 
-	void OnMouseExit()
-	{
-		Info.SetActive(false);
-	}
 }
